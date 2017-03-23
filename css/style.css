@@ -1,0 +1,99 @@
+body {
+    text-align: center;
+}
+
+h1,
+h2,
+h3 {
+	font-weight: bold;
+}
+
+.orange {
+	background-color: #d24a1d;
+}
+
+.blue {
+	background-color: #4f67d3;
+}
+
+.gray {
+	background-color: #d1cfc7;
+}
+
+.green {
+	background-color: #65c84e;
+}
+
+.white-text {
+	color: #fff;
+}
+
+.orange-text {
+	color: #d24a1d;
+}
+
+.green-text {
+	color: #65c84e;
+}
+
+body.modal-open .modal {
+    display: flex !important;
+    height: 100%;
+}
+
+body.modal-open .modal .modal-dialog {
+    margin: auto;
+}
+/*Thank you to stack overflow for showing me how to vertically center my modal window
+	http://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window*/
+
+.select-difficulty {
+	margin-bottom: 15px;
+}
+
+button {
+	padding: 0;
+	margin: 0;
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    opacity: 0;
+    transition: .4s ease;
+    background-color: #d24a1d;/*rgba(255,102,0,0.75)*/
+}
+
+.thumbnail-overlay:hover {
+    opacity: 0.75;
+}
+
+.thumbnailText {
+    width: 99%;
+    color: white;
+    font-size: 2.0em;
+    font-weight: bold;
+    position: absolute;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+/*Thumbnail overlay test - END
+  Thank you to w3schools for teaching me how to implement an overlay on my project thumbnails:
+  -https://www.w3schools.com/howto/howto_css_image_overlay.asp*/
+
+.modal-footer {
+	height: 70px;
+	display: block;
+	text-align: center;
+}
+
+.modal-footer>span {
+	font-weight: bold;
+	font-size: 2.0em;
+}
