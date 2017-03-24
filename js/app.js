@@ -5,7 +5,7 @@ var numOfEnemies;
 // score is a running tabulation of the players score
 var score = 0;
 // player lives left that are displayed on the game screen at all times
-var lives = 30;
+var lives = 3;
 /**
  * playerFrozen tracks the state of the player avatar. If it is moving around
  * it is false, if the player gets to the water it will change to true
