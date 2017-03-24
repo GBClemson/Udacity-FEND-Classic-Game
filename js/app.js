@@ -5,8 +5,9 @@ var numOfEnemies;
 // score is a running tabulation of the players score
 var score = 0;
 // player lives left that are displayed on the game screen at all times
-var lives = 3;
-/* playerFrozen tracks the state of the player avatar. If it is moving around
+var lives = 30;
+/**
+ * playerFrozen tracks the state of the player avatar. If it is moving around
  * it is false, if the player gets to the water it will change to true
  * If the player is dead or out of lives it will change to true.
  * This will allow us to unpause the game only when playerFrozen is false.
@@ -17,12 +18,14 @@ var playerFrozen = false;
  * it triggers an acheivement after a predetermined number of moves.
  */
 var dangerZone = 0;
-/* gamePaused will be checked for with each game frame.
-/* If it ever switches to true then the enemies and player cannot move.
+/**
+ * gamePaused will be tested for with each game frame.
+ * If it ever switches to true then the enemies and player cannot move.
  */
 var gamePaused = false;
 
-/* clearScore and clearLives covers up the current score or number of lives with white text
+/**
+ * clearScore and clearLives covers up the current score or number of lives with white text
  * so that it cannot be seen under the new updated score.
  * It must be run anytime the score or lives are updated and it must
  * be run before the score gets updated.
@@ -55,6 +58,7 @@ var maxX = 505;
 //laneCoords forces the enemy-bug to have a y coordinate that puts it in the middle of one of the 3 stone lanes on the screen.
 var laneCoords = [61, 144, 227];
 
+
 /* checkCollisions being called from engine.js. Established collision points based on the dimensions of
  * enemy and player sprites
  */
@@ -74,13 +78,14 @@ function checkCollisions() {
         var playerTop = player.y + 64;
         var playerBottom = player.y + 139;
 
-        if (enemyRight > playerLeft && enemyLeft < playerRight && enemyBottom > playerTop && enemyTop < playerBottom) {
+        // we must include 'playerFrozen === false' in the collision detection because wo do not want to
+        // collide with more than one bug a the same time. Once the first collision happens playerFrozen
+        // will be true so no other collisions will occur and take additional lives from the player.
+        if (playerFrozen === false && enemyRight > playerLeft && enemyLeft < playerRight && enemyBottom > playerTop && enemyTop < playerBottom) {
             function youDied() {
                 gamePaused = true;
-                playerFrozen = true;
                 clearLives();
                 lives--;
-                console.log("You died and now have "+lives+" lives left");
                 // deadConfirm is here to give the player a chance to quit playing after a death.
                 function deadConfirm() {
                      if (confirm("YOU DIED!! Press OK to continue playing,\n or Press CANCEL to quit.") == true) {
@@ -88,21 +93,30 @@ function checkCollisions() {
                         player.x = 202;
                         player.y = 403;
                         gamePaused = false;
-                        playerFrozen = false;
-                    }else{
-                        alert("THANKS FOR PLAYING MY AWESOMELY ADVANCED GAME!!\n "+
-                            "Refresh your screen to try a different difficulty!\n "+
-                            "(Press ctrl+R or hit the refresh button at the top of the browser)");
+                        // Delaying playerFrozen = false is put in place to avoid multiple deaths by running into more
+                        // than one bug at the same time. Learned of this issue through testing.
+                        setTimeout(function(){ playerFrozen = false; }, 100);
+                    } else {
+                        alert("THANKS FOR PLAYING MY AWESOMELY ADVANCED GAME!!\n"+
+                            "feel free to try a different difficulty!");
+                        // location.reload will automatically refresh the window which will
+                        // then offer the user to select a difficualty and start over.
+                        location.reload();
+                        // Thanks to w3schools.com for showing me that it is really easy to refresh the browser window:
+                        // https://www.w3schools.com/jsref/met_loc_reload.asp
                     }
                 }
                 if (lives > 0) {
                     deadConfirm();
                 }if (lives === 0) {
-                    alert("OOOOH, too bad. You have no lives left! GAME OVER\n "+
-                        "Refresh your screen to try a different difficulty!\n "+
-                        "(Press ctrl+R or hit the refresh button at the top of the browser)");
+                    alert("OOOOH, too bad. You have no lives left! \nGAME OVER!!\n"+
+                        "feel free to try a different difficulty!");
+                    // location.reload will automatically refresh the window which will
+                    // then offer the user to select a difficualty and start over.
+                    location.reload();
                 }
             }
+            playerFrozen = true;
             player.sprite = 'images/char-boy-dead.png';
             /* we call the youDied function 5ms after the collision so that the player sprite will
              * move and show up on the screen in the correct position before the function is called.
@@ -164,8 +178,8 @@ var Player = function() {
 };
 
 Player.prototype.update = function(dt) {
-    // dangerZone is triggered when a player has 20 moves in the bug lanes without winning or dying.
-    // It awards bonus points.
+    // dangerZone is a variable that counts up each time the player moves on the stone "bug lanes".
+    // When a player has 20 moves in the bug lanes without winning or dying, they are awarded bonus points.
     if (dangerZone === 20) {
         gamePaused = true;
         clearScore();
@@ -190,6 +204,8 @@ Player.prototype.update = function(dt) {
         setTimeout(function(){ livingDangerously(); }, 5);
 
     }
+    // dangerZone is a variable that counts up each time the player moves on the stone "bug lanes".
+    // When a player has 50 moves in the bug lanes without winning or dying, they are awarded bonus points.
     if (dangerZone === 50) {
         gamePaused = true;
         clearScore();
@@ -197,7 +213,7 @@ Player.prototype.update = function(dt) {
         function fearless() {
             playerFrozen = true;
             if (confirm("CONGRATULATIONS!! You are fearless!\n(50 moves in bug lanes without winning or dying)\n5000 points!") == true) {
-                // One second delay after exiting the alert window before enemies start moving again.
+                // One second delay after exiting the confirm window before enemies start moving again.
                 setTimeout(function(){ gamePaused = false; }, 1000);
                 playerFrozen = false;
             } else {
@@ -258,9 +274,11 @@ Player.prototype.handleInput = function(input) {
                     playerFrozen = false;
                 } else {
                     dangerZone = 0;
-                    alert("THANKS FOR PLAYING MY AWESOMELY ADVANCED GAME!!\n "+
-                            "Refresh your screen to try a different difficulty!\n "+
-                            "(Press ctrl+R or hit the refresh button at the top of the browser)");
+                    alert("THANKS FOR PLAYING MY AWESOMELY ADVANCED GAME!!\n"+
+                        "feel free to try a different difficulty!");
+                    // location.reload will automatically refresh the window which will
+                    // then offer the user to select a difficualty and start over.
+                    location.reload();
                 }
 
             }
@@ -268,14 +286,14 @@ Player.prototype.handleInput = function(input) {
             score = score + 100;
             setTimeout(function(){ youWon(); }, 300);
         }
-        if(input != "left" && input != "right" && input != "down" && input != "up" && input != "p") {
+        if(input != 'left' && input != 'right' && input != 'down' && input != 'up' && input != 'p') {
             gamePaused = true;
             playerFrozen = true;
             // I want the game to be paused while an alert window is open so I chose to use the confirm window.
             // It is a bit redundant with both buttons doing the same thing but it is the only way I know to
             // trigger the paused state while the window is open.
             if (confirm("You can only use the arrow keys or the arrows on the numpad to move around the board:\n press OK or CANCEL to continue") == true) {
-                // One second delay after exiting the alert window before enemies start moving again.
+                // One second delay after exiting the confirm window before enemies start moving again.
                 setTimeout(function(){ gamePaused = false; }, 1000);
                 playerFrozen = false;
             }else{

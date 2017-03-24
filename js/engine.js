@@ -15,7 +15,6 @@
  */
 
 
-
 function difficulty(skill){
     // numOfEnemies establishes the approx number of enemies that are on the screen at one time.
     // This should be set by selecting a difficulty on a modal window that pops up when the

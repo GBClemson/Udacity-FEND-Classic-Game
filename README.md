@@ -49,8 +49,11 @@ The controls for the game are very simple. You can only use the arrow keys. Eith
 ### Navigating the board
 Some things to think about while navigating the game board. The player avatar moves in different increments depending on the direction you are moving. If you move up or down, the player will move one full square in that direction. However to be a little safer / more precise when on the bug lanes you will only move one half of a square to the left or right.
 
-#### Winning the game
+### Winning the game
 There is no way to "beat" the game. Your score goes up each time you move while on the bug lanes and if you get to the water. There are even a couple of secret achievements that you can unlock by doing certain things while playing.
 
-#### Game End
-There are multiple opportunities for you as the player to quit playing. Each time you die you are asked if you want to continue. Each time you win you are asked if you would like to continue. And of course once you are out of lives, you cannot continue. IF at any of these points you either decide not to play anymore or you cannot play anymore... The game does not currently have a full reset option that brings you, the user back to the difficulty selection screen. Instead you are prompted at these points to refresh your browser window to play again.
+### Game End
+There are multiple opportunities for you as the player to quit playing. Each time you die you are asked if you want to continue. Each time you win you are asked if you would like to continue. And of course once you are out of lives, you cannot continue. If at **any** of these points you either decide not to play anymore or you cannot play anymore... You will be greeted with an alert window that thanks you for playing the game. Once you escape / exit that window, your browser will automatically be refreshed which then offers you the difficulty selection screen.
+
+## License
+This classic arcade game is Copyright &copy; 2017 Greg Bopp. It is free software, and may be redistributed under the terms specified in the [LICENSE](https://github.com/GBClemson/Udacity-FEND-Classic-Game/blob/master/LICENSE.txt) file.
